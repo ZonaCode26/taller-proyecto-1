@@ -1,5 +1,6 @@
 package com.taller.proyecto.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.taller.proyecto.model.Producto;
@@ -51,6 +53,17 @@ public class ProductoController {
 	@PostMapping(value = "/filter-data")
 	public ResponseEntity<Page<Producto>> getAllFilterPageable(@RequestBody RequestFilterProducto requestFilter) {		
 		return new ResponseEntity<Page<Producto>>(service.findAllWithPageable2(requestFilter), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/find-all")
+	public ResponseEntity<List<Producto>> getFindAllByIds(@RequestParam("ids") List<Integer> ids) {
+		
+//		List<Integer> listIds = new ArrayList<>();
+		
+//		ids.forEach(x->{
+//			listIds.add(Integer.parseInt(x));
+//		});		
+		return new ResponseEntity<List<Producto>>(service.findAllByIds(ids), HttpStatus.OK);
 	}
 	
 //	@PostMapping(value = "/v3/filter")

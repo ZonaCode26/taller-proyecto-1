@@ -14,6 +14,8 @@ public interface IProductoService {
 	
 	List<Producto> findAll();
 	
+	List<Producto> findAllByIds(List<Integer> ids);
+	
 	List<Producto> findAllWithPageable(RequestFilterProducto entity);
 	
 	Page<Producto> findAllWithPageable2(RequestFilterProducto entity);

@@ -110,6 +110,10 @@ public class ProductoServiceImpl implements IProductoService{
 		return  pageProduct;
 	}
 	
-	
+	@Override
+	public List<Producto> findAllByIds(List<Integer> ids ) {
+		
+		return repo.findAllById(ids);
+	}
 
 }
