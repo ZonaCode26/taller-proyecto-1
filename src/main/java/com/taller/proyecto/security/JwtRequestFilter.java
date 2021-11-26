@@ -15,7 +15,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.taller.proyecto.service.impl.UsuarioServiceImpl;
+import com.taller.proyecto.model.Usuario;
+import com.taller.proyecto.service.IUsuarioService;
+import com.taller.proyecto.service.impl.UserServiceImpl;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -23,11 +25,15 @@ import io.jsonwebtoken.ExpiredJwtException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private UsuarioServiceImpl jwtUserDetailsService;
+	private UserServiceImpl jwtUserDetailsService;
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
+	
 
+	@Autowired
+	private IUsuarioService usuarioService;
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
@@ -68,6 +74,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				// that the current user is authenticated. So it passes the
 				// Spring Security Configurations successfully.
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				
+				Usuario userSession = usuarioService.findUserByEmail(username);
+				
+				GlobalUsuarioSession.GlobalUsuarioSessionBuilder globalUsuarioSession =   GlobalUsuarioSession.builder();
+				 request.setAttribute("email", userSession.getEmail());
+		         request.setAttribute("idUser", userSession.getIdUsuario());
+		         request.setAttribute("ruc", userSession.getRuc());
+		         request.setAttribute("userType", userSession.getRoles().get(0).getNombre());
+		         
+		         globalUsuarioSession.email(userSession.getEmail())
+		                    .userId(Integer.valueOf(userSession.getIdUsuario()))
+		                    .ruc(userSession.getRuc())
+		                    .userType(userSession.getRoles().get(0).getNombre());
+		         
+		         request.setAttribute("globalUsuarioSession", globalUsuarioSession.build());
+		            
+				// 
 			}
 		}
 		chain.doFilter(request, response);

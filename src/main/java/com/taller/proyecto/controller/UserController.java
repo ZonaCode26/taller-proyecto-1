@@ -28,7 +28,7 @@ import com.taller.proyecto.security.JwtResponse;
 import com.taller.proyecto.security.JwtTokenUtil;
 import com.taller.proyecto.service.ILoginService;
 import com.taller.proyecto.service.IResetTokenService;
-import com.taller.proyecto.service.impl.UsuarioServiceImpl;
+import com.taller.proyecto.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/authenticate")
@@ -44,7 +44,7 @@ public class UserController {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
-	private UsuarioServiceImpl userDetailsService;
+	private UserServiceImpl userDetailsService;
 	
 	@Autowired
 	private ILoginService service;

@@ -39,6 +39,8 @@ public class Producto {
 	
 	private LocalDate fechaRegistro;
 	
+	private Integer cantidad;
+	
 
 
 }
