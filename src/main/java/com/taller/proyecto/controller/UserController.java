@@ -62,7 +62,10 @@ public class UserController {
 
 		final UserDetails userDetails = userDetailsService
 				.loadUserByUsername(authenticationRequest.getUsername());
-
+		
+		if (userDetails.getAuthorities().isEmpty()) {
+			throw new UsernameNotFoundException("Usuario no encontrado.");
+		}
 		userDetails.getAuthorities().forEach(rol -> {
 			
 			if(rol == null ) {
@@ -89,6 +92,9 @@ public class UserController {
 		final UserDetails userDetails = userDetailsService
 				.loadUserByUsername(authenticationRequest.getUsername());
 
+		if (userDetails.getAuthorities().isEmpty()) {
+			throw new UsernameNotFoundException("Usuario no encontrado.");
+		}
 		userDetails.getAuthorities().forEach(rol -> {
 			
 			if(rol == null ) {
@@ -115,7 +121,10 @@ public class UserController {
 
 		final UserDetails userDetails = userDetailsService
 				.loadUserByUsername(authenticationRequest.getUsername());
-
+		
+		if (userDetails.getAuthorities().isEmpty()) {
+			throw new UsernameNotFoundException("Usuario no encontrado.");
+		}
 		userDetails.getAuthorities().forEach(rol -> {
 			
 			if(rol == null ) {
