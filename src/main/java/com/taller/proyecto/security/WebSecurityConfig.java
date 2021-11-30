@@ -59,12 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/v2/api-docs/**" ).permitAll()
                 .antMatchers("/v3/api-docs/**" ).permitAll()
 				.antMatchers("/authenticate").permitAll()
-				.antMatchers("/authenticate/**").permitAll()
-				.antMatchers("/producto").authenticated()
-				.antMatchers("/producto/**").authenticated()
-				.antMatchers("/localidad/**").authenticated()
-				.antMatchers("/cotizacion").authenticated()
-				.antMatchers("/cotizacion/**").authenticated()
+				.antMatchers("/producto").permitAll()
+				.antMatchers("/cotizacion").permitAll()
+				.antMatchers("/cotizacion").permitAll()
 				// all other requests need to be authenticated
 				.anyRequest().authenticated().and().
 				// make sure we use stateless session; session won't be used to
