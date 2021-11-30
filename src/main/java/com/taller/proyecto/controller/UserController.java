@@ -32,7 +32,7 @@ import com.taller.proyecto.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/authenticate")
-@CrossOrigin
+@CrossOrigin("*")
 public class UserController {
 
 	private static   Logger log =  LogManager.getLogger("logins-all");
@@ -55,6 +55,23 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder bcrypt;
 	
+	
+//	@PostMapping(name = "/login")
+//	public ResponseEntity<?> login(@RequestBody JwtRequest authenticationRequest) throws Exception {
+//
+//		if ("ADMIN".equalsIgnoreCase(authenticationRequest.getAcceso())) {
+//			return createAuthenticationToken(authenticationRequest);
+//		} else if ("CLIENT".equalsIgnoreCase(authenticationRequest.getAcceso())) {
+//			return createAuthenticationToken(authenticationRequest);
+//		}
+//		if ("PROVIDER".equalsIgnoreCase(authenticationRequest.getAcceso())) {
+//			return createAuthenticationToken(authenticationRequest);
+//		} else {
+//			throw new UsernameNotFoundException("Error al iniciar sesion.");
+//		}
+//
+//	}
+//	
 	@PostMapping
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 

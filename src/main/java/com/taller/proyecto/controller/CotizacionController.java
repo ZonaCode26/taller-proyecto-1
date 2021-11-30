@@ -23,7 +23,7 @@ import com.taller.proyecto.service.ICotizacionService;
 
 @RestController
 @RequestMapping("/cotizacion")
-@CrossOrigin
+@CrossOrigin("*")
 public class CotizacionController {
 
 	private static   Logger log =  LogManager.getLogger("CotizacionController-all");

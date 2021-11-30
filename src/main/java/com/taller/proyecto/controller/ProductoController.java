@@ -23,7 +23,7 @@ import com.taller.proyecto.service.IProductoService;
 
 @RestController
 @RequestMapping("/producto")
-@CrossOrigin
+@CrossOrigin("*")
 public class ProductoController {
 
 	private static   Logger log =  LogManager.getLogger("ProductoController-all");

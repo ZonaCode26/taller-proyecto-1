@@ -28,7 +28,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
 		mapException.put("message", "No estas autorizado para acceder a este recurso");
 		mapException.put("exception", "No autorizado");
 		mapException.put("path", request.getServletPath());
-		mapException.put("timestamp", LocalDateTime.now());
+		//mapException.put("timestamp", LocalDateTime.now());
 
 		response.setContentType("application/json");
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

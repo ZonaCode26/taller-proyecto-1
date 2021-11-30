@@ -20,7 +20,7 @@ import com.taller.proyecto.service.ILocalidadService;
 
 @RestController
 @RequestMapping("/localidad")
-@CrossOrigin
+@CrossOrigin("*")
 public class LocalidadController {
 
 	private static   Logger log =  LogManager.getLogger("LocalidadController-all");
