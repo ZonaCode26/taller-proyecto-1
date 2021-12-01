@@ -1,10 +1,23 @@
 package com.taller.proyecto.exception;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +25,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -103,23 +117,64 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler{
 	
 	
 	
-	
-	
-	
+	@ExceptionHandler(ConstraintViolationException.class)
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	public ResponseEntity<ExceptionResponseCustom> handleConstraintViolatedException(ConstraintViolationException ex
+	) {
+		Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
 
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		List<String> errors = new ArrayList<>(constraintViolations.size());
+		String error;
+		for (ConstraintViolation constraintViolation : constraintViolations) {
+
+			error = "El "+ constraintViolation.getPropertyPath() + ", "+ constraintViolation.getMessage();
+			errors.add(error);
+		}
 		
-		ex.getBindingResult().getAllErrors().forEach(e -> {
-			mensaje += e.getDefaultMessage().toString() + "\n";
-		});
+		Collections.sort(errors, Collections.reverseOrder());
 		
-		ExceptionResponse er = new ExceptionResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
-		log = getLooger(request);
-		log.error(er.toString());		
-		return new ResponseEntity<Object>(er, HttpStatus.BAD_REQUEST);
+		ExceptionResponseCustom exc = new ExceptionResponseCustom(LocalDateTime.now(),String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR), ex.getMessage(), "", "",errors);
+		
+		//ErrorMessage errorMessage = new ErrorMessage(errors);
+		return new ResponseEntity(exc, HttpStatus.BAD_REQUEST);
 	}
+	
+	@Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status, WebRequest request) {
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", status.value());
+        
+        //Get all errors
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(x -> x.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, headers, status);
+
+    }
+
+//	@Override
+//	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+//			HttpHeaders headers, HttpStatus status, WebRequest request) {
+//		
+//		ex.getBindingResult().getAllErrors().forEach(e -> {
+//			mensaje += e.getDefaultMessage().toString() + "\n";
+//		});
+//		
+//		ExceptionResponse er = new ExceptionResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+//		log = getLooger(request);
+//		log.error(er.toString());		
+//		return new ResponseEntity<Object>(er, HttpStatus.BAD_REQUEST);
+//	}
 
 	
 	private Logger getLooger(WebRequest webRequest) {

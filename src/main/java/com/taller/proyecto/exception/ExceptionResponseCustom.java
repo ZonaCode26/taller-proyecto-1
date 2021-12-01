@@ -1,6 +1,7 @@
 package com.taller.proyecto.exception;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ExceptionResponseCustom {
 
@@ -9,7 +10,8 @@ public class ExceptionResponseCustom {
 	private String message;
 	private String code;
 	private String backendMesage;
-
+	private List<String> errors;
+	
 	public ExceptionResponseCustom(LocalDateTime fecha, String httpStatus, String message, String code,
 			String backendMesage) {
 		this.fecha = fecha;
@@ -17,6 +19,16 @@ public class ExceptionResponseCustom {
 		this.message = message;
 		this.code = code;
 		this.backendMesage = backendMesage;
+	}
+	
+	public ExceptionResponseCustom(LocalDateTime fecha, String httpStatus, String message, String code,
+			String backendMesage,List<String> errors ) {
+		this.fecha = fecha;
+		this.httpStatus = httpStatus;
+		this.message = message;
+		this.code = code;
+		this.backendMesage = backendMesage;
+		this.errors = errors;
 	}
 	
 	public LocalDateTime getFecha() {
@@ -49,7 +61,12 @@ public class ExceptionResponseCustom {
 	public void setBackendMesage(String backendMesage) {
 		this.backendMesage = backendMesage;
 	}
-
+	public List<String> getErrors() {
+		return errors;
+	}
+	public void setErrors(List<String> errors) {
+		this.errors = errors;
+	}
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

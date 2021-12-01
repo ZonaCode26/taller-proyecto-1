@@ -1,5 +1,7 @@
 package com.taller.proyecto.controller;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import com.taller.proyecto.security.JwtTokenUtil;
 import com.taller.proyecto.service.ILoginService;
 import com.taller.proyecto.service.IResetTokenService;
 import com.taller.proyecto.service.impl.UserServiceImpl;
+import com.taller.proyecto.utils.RequestValidator;
 
 @RestController
 @RequestMapping("/authenticate")
@@ -55,6 +58,9 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder bcrypt;
 	
+	@Autowired
+	private RequestValidator validador;
+	
 	
 //	@PostMapping(name = "/login")
 //	public ResponseEntity<?> login(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -74,7 +80,7 @@ public class UserController {
 //	
 	@PostMapping
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
+		validador.validate(authenticationRequest);
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
 		final UserDetails userDetails = userDetailsService
@@ -103,7 +109,7 @@ public class UserController {
 
 	@PostMapping(value = "/provider")
 	public ResponseEntity<?> createAuthenticationTokenProvider(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
+		validador.validate(authenticationRequest);
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
 		final UserDetails userDetails = userDetailsService
@@ -134,6 +140,7 @@ public class UserController {
 	@PostMapping(value = "/client")
 	public ResponseEntity<?> createAuthenticationTokenClient(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
+		validador.validate(authenticationRequest);
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
 		final UserDetails userDetails = userDetailsService
