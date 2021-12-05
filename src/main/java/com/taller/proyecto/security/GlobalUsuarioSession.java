@@ -19,4 +19,6 @@ public class GlobalUsuarioSession {
 	private String accessToken;
 	private String ipDevice;
 	private String ruc;
+	private String direccion;
+	private String celular;
 }

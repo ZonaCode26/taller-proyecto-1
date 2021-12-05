@@ -89,12 +89,16 @@ System.err.println(request.getHeaderNames().toString());
 				 request.setAttribute("name", userSession.getRazonSocial());
 		         request.setAttribute("idUser", userSession.getIdUsuario());
 		         request.setAttribute("ruc", userSession.getRuc());
+		         request.setAttribute("celular", userSession.getCelular());
+		         request.setAttribute("direccion", userSession.getDireccion());
 		         request.setAttribute("userType", userSession.getRoles().get(0).getNombre());
 		         
 		         globalUsuarioSession.email(userSession.getEmail())
 		         			.name(userSession.getRazonSocial())
 		                    .userId(Integer.valueOf(userSession.getIdUsuario()))
 		                    .ruc(userSession.getRuc())
+		                    .celular(userSession.getCelular())
+		                    .direccion(userSession.getDireccion())
 		                    .userType(userSession.getRoles().get(0).getNombre());
 		         
 		         request.setAttribute("globalUsuarioSession", globalUsuarioSession.build());

@@ -1,14 +1,17 @@
 package com.taller.proyecto.service.impl;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,15 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
 public class CotizacionServiceImpl implements ICotizacionService{
+	
+	@Value("${empresa.razonsocial}")
+	private String razonsocial;
+	
+	@Value("${empresa.ruc}")
+	private String ruc;
+	
+	@Value("${empresa.email}")
+	private String email;
 	
 	@Autowired
 	private ICotizacionRepo repo;	
@@ -139,7 +151,7 @@ public class CotizacionServiceImpl implements ICotizacionService{
 	}
 
 	@Override
-	public byte[] generarPdfCotizacion(Integer id) {
+	public byte[] generarPdfCotizacion(Integer id, GlobalUsuarioSession globalSession) {
 		byte[] data = null;
 		
 		Cotizacion cotizacion = repo.findFirstById(id);
@@ -169,19 +181,25 @@ public class CotizacionServiceImpl implements ICotizacionService{
 			total_precio +=item.getPreciototal();
 			reporteList.add(item);
 		}
+		SimpleDateFormat formatter = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy");
+		String date = formatter.format(new Date() );
 		
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		parametros.put("preciototal", total_precio);
 		parametros.put("igv",total_precio * 0.18);
 		parametros.put("total", total_precio+(total_precio * 0.18));
-		parametros.put("ruc","987899878" );
-		parametros.put("email","alc@gmail.com" );
+		
+		parametros.put("razonsocial", razonsocial );
+		parametros.put("ruc",ruc );
+		parametros.put("email",email );
 		parametros.put("numcotizacion", cotizacion.getId());
-		parametros.put("fecha", "Lima, 4 de diciembre del 2021");
-		parametros.put("benruc", "98776565");
-		parametros.put("bendireccion", "villa nose");
-		parametros.put("bencentral", "01 29882");
-		parametros.put("benemail","prueba@sas.com" );
+		parametros.put("fecha","Lima, "+date);
+		
+		
+		parametros.put("benruc", globalSession.getRuc());
+		parametros.put("bendireccion", globalSession.getDireccion());
+		parametros.put("bencentral", globalSession.getCelular());
+		parametros.put("benemail",globalSession.getEmail() );
 		
 		
 		try{

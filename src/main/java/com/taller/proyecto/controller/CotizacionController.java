@@ -78,10 +78,10 @@ public class CotizacionController {
 //	
 	
 	@GetMapping(value = "/generar-pdf-cotizacion/{id}")
-	public ResponseEntity<byte[]> generarPdfCotizacion(@PathVariable("id") Integer id) {
+	public ResponseEntity<byte[]> generarPdfCotizacion(@PathVariable("id") Integer id,@RequestAttribute("globalUsuarioSession") GlobalUsuarioSession globalSession) {
 		
 	
-		return new ResponseEntity<byte[]>(service.generarPdfCotizacion(id), HttpStatus.OK);
+		return new ResponseEntity<byte[]>(service.generarPdfCotizacion(id,globalSession), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/crear-cotizacion")
