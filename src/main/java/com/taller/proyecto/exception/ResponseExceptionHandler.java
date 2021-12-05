@@ -3,7 +3,6 @@ package com.taller.proyecto.exception;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,10 +16,10 @@ import javax.validation.ConstraintViolationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -79,6 +78,17 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler{
 		log.error(exc.toString());
 		return new ResponseEntity<ExceptionResponseCustom>(exc, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(AuthenticationException.class)
+	public final ResponseEntity<ExceptionResponseCustom> authenticationException(AuthenticationException ex, WebRequest request){
+		
+		ExceptionResponseCustom exc = new ExceptionResponseCustom(LocalDateTime.now(),String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR), ex.getMessage(), "", "");
+		log = getLooger(request);
+		log.error(exc.toString());
+		return new ResponseEntity<ExceptionResponseCustom>(exc, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
 	
 	@ExceptionHandler(NumberFormatException.class)
 	public final ResponseEntity<ExceptionResponseCustom> NumberFormatException(NumberFormatException ex, WebRequest request){

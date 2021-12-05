@@ -16,4 +16,8 @@ public interface ICotizacionService {
 
 	Cotizacion findFirstByCode(String  code);
 
+	byte[] generarPdfCotizacion(Integer id);
+
+	Cotizacion createPedido(Cotizacion cotizacion, GlobalUsuarioSession globalSession);
+
 }

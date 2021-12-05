@@ -2,6 +2,7 @@ package com.taller.proyecto.security;
 
 import java.io.IOException;
 
+import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,10 +53,14 @@ System.err.println(request.getHeaderNames().toString());
 				username = jwtTokenUtil.getUsernameFromToken(jwtToken);
 			} catch (IllegalArgumentException e) {
 				System.out.println("Unable to get JWT Token");
+				throw new IllegalArgumentException("Unable to get JWT Token");
 			} catch (ExpiredJwtException e) {
 				System.out.println("JWT Token has expired");
+				throw new AuthenticationException("WT Token has expired");
 			}
 		} else {
+//			response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+//                    "jwt token is invalid or incorrect");
 			logger.warn("JWT Token does not begin with Bearer String");
 		}
 
@@ -81,11 +86,13 @@ System.err.println(request.getHeaderNames().toString());
 				
 				GlobalUsuarioSession.GlobalUsuarioSessionBuilder globalUsuarioSession =   GlobalUsuarioSession.builder();
 				 request.setAttribute("email", userSession.getEmail());
+				 request.setAttribute("name", userSession.getRazonSocial());
 		         request.setAttribute("idUser", userSession.getIdUsuario());
 		         request.setAttribute("ruc", userSession.getRuc());
 		         request.setAttribute("userType", userSession.getRoles().get(0).getNombre());
 		         
 		         globalUsuarioSession.email(userSession.getEmail())
+		         			.name(userSession.getRazonSocial())
 		                    .userId(Integer.valueOf(userSession.getIdUsuario()))
 		                    .ruc(userSession.getRuc())
 		                    .userType(userSession.getRoles().get(0).getNombre());

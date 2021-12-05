@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.taller.proyecto.model.ResetToken;
+import com.taller.proyecto.security.GlobalUsuarioSession;
 import com.taller.proyecto.security.JwtRequest;
 import com.taller.proyecto.security.JwtResponse;
 import com.taller.proyecto.security.JwtTokenUtil;
@@ -61,6 +63,7 @@ public class UserController {
 	@Autowired
 	private RequestValidator validador;
 	
+
 	
 //	@PostMapping(name = "/login")
 //	public ResponseEntity<?> login(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -214,4 +217,16 @@ public class UserController {
 		bcrypt = 	new BCryptPasswordEncoder();
 		return new ResponseEntity<String>(bcrypt.encode(token), HttpStatus.OK);
 	}
+	// --------------------------------
+	@GetMapping(value = "/my-information")
+	public ResponseEntity<?> myInformation(@RequestAttribute("globalUsuarioSession") GlobalUsuarioSession globalSession) throws Exception {
+		
+		return ResponseEntity.ok(globalSession);
+	}
+	
+//	@GetMapping("/anular/{tokenId:.*}")	
+//	public void revocarToken(@PathVariable("tokenId") String token) {
+//		tokenServices.revokeToken(token);
+//	
+//	}
 }

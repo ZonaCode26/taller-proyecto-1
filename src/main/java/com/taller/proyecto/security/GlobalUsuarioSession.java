@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class GlobalUsuarioSession {
 	private Integer userId;
 	private String email;
+	private String name;
 	private String userType;
 	private String platform;
 	private String authorization;
