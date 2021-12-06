@@ -115,20 +115,24 @@ public class CotizacionServiceImpl implements ICotizacionService{
 			datosParam.put(x.getId(), x.getCantidad());
 			listIds.add(x.getId());
 		});
-
+		double total_precio = 0;
 		List<DetalleCotizacion> listCotizacions = new ArrayList<>();
 
 		List<Producto> getListProd = repoProd.findAllById(listIds);
 		for (Producto producto : getListProd) {
 
 			
-			listCotizacions.add(DetalleCotizacion.builder()
-					.cantidad(datosParam.get(producto.getId()))
-					.precioUnidad(producto.getPrecio())
-					.producto(producto)
-					.precioTotal(datosParam.get(producto.getId()) * producto.getPrecio())
-					.cotizacion(cotizacion)
-					.fechaRegistro(LocalDate.now()).build());
+			DetalleCotizacion detC = DetalleCotizacion.builder()
+			.cantidad(datosParam.get(producto.getId()))
+			.precioUnidad(producto.getPrecio())
+			.producto(producto)
+			.precioTotal(datosParam.get(producto.getId()) * producto.getPrecio())
+			.cotizacion(cotizacion)
+			.fechaRegistro(LocalDate.now()).build();
+					
+			listCotizacions.add(detC);
+			
+			total_precio +=detC.getPrecioTotal() *1.18;
 
 		}
 
@@ -136,7 +140,8 @@ public class CotizacionServiceImpl implements ICotizacionService{
 
 		cotizacion.getUsuario().setPassword(null);
 		cotizacion.getUsuario().setEmail(null);
-
+		cotizacion.setTotalBrutoCotizacion(total_precio);
+		repo.save(cotizacion);
 		return cotizacion;
 	}
 

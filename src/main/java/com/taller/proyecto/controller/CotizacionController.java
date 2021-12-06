@@ -93,7 +93,11 @@ public class CotizacionController {
 	@PostMapping(value = "/datatable-filter")
 	public ResponseEntity<ResponseDatatable<Cotizacion>> getDatatableFilter(@RequestBody RequestFilterCotizacion filter,@RequestAttribute("globalUsuarioSession") GlobalUsuarioSession globalSession ) {		
 		
-		List<Cotizacion> lista =  service.findAll();
+		List<Cotizacion> lista =  service.findAll().stream()
+			    .filter(p -> p.getUsuario().getIdUsuario() == globalSession.getUserId()).collect(Collectors.toList());
+		
+		
+		
 		ResponseDatatable<Cotizacion> entity =  new ResponseDatatable<Cotizacion>(); 
 		entity.setData(lista);
 		entity.setDraw(0);
