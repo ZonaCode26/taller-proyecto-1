@@ -1,6 +1,7 @@
 package com.taller.proyecto.service.impl;
 
 import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -203,7 +204,17 @@ public class CotizacionServiceImpl implements ICotizacionService{
 		
 		
 		try{
-			File file = new ClassPathResource("/reports/reporte-cotizacion.jasper").getFile();
+			
+//			ClassPathResource classPathResource = new ClassPathResource("reports/reporte-cotizacion.jasper");
+//
+//			InputStream inputStream = classPathResource.getInputStream();
+//			File somethingFile = File.createTempFile("test", ".txt");
+			
+			
+			
+			File file = new ClassPathResource("reports/reporte-cotizacion.jasper").getFile();
+			
+			
 			JasperPrint print = JasperFillManager.fillReport(file.getPath(), parametros, new JRBeanCollectionDataSource(reporteList));
 			data = JasperExportManager.exportReportToPdf(print);
 			guardarReporteCotizacion(cotizacion,data);
