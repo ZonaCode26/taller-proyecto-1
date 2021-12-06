@@ -13,9 +13,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.taller.proyecto.MsTallerProyectoApplication;
 import com.taller.proyecto.exception.ModeloNotFoundException;
 import com.taller.proyecto.model.Archivo;
 import com.taller.proyecto.model.Cotizacion;
@@ -210,12 +212,14 @@ public class CotizacionServiceImpl implements ICotizacionService{
 //			File somethingFile = File.createTempFile("test", ".txt");
 			
 			
+			//FileSystemResource aa = new FileSystemResource(null, date)
 			
 			
-			File file = new ClassPathResource("reports/reporte-cotizacion.jasper").getFile();
+			//File file = new ClassPathResource("reports/reporte-cotizacion.jasper").getFile();
 			
-			
-			JasperPrint print = JasperFillManager.fillReport(file.getPath(), parametros, new JRBeanCollectionDataSource(reporteList));
+			JasperPrint print = JasperFillManager.fillReport(MsTallerProyectoApplication.class.getResourceAsStream("/reports/reporte-cotizacion.jasper"), parametros, new JRBeanCollectionDataSource(reporteList));
+
+			//JasperPrint print = JasperFillManager.fillReport(file.getPath(), parametros, new JRBeanCollectionDataSource(reporteList));
 			data = JasperExportManager.exportReportToPdf(print);
 			guardarReporteCotizacion(cotizacion,data);
 		}catch(Exception e) {
