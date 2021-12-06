@@ -1,7 +1,6 @@
 package com.taller.proyecto.service.impl;
 
 import java.io.File;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -209,6 +208,7 @@ public class CotizacionServiceImpl implements ICotizacionService{
 //
 //			InputStream inputStream = classPathResource.getInputStream();
 //			File somethingFile = File.createTempFile("test", ".txt");
+			
 			
 			
 			
