@@ -14,8 +14,9 @@ public class JwtRequest implements Serializable {
 	
 	@NotNull(message = "no debe ser nulo.")
 	@NotEmpty(message = "no debe ser vacio.")
-	//@Max(value = 50,message = "debe ser como maximo 50 caracteres.")
-//	@Min(value = 5,message = "debe ser como minimo 5 caracteres.")
+	
+	//@Max(50)
+	//@Min( 5)
 	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$",message = "no cumple con el formato de correo.")
 	private String username;
 	

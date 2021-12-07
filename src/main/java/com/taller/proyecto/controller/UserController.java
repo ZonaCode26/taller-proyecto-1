@@ -1,5 +1,12 @@
 package com.taller.proyecto.controller;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.security.sasl.AuthenticationException;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -25,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.taller.proyecto.exception.ExceptionResponseCustom;
 import com.taller.proyecto.model.ResetToken;
 import com.taller.proyecto.security.GlobalUsuarioSession;
 import com.taller.proyecto.security.JwtRequest;
@@ -113,6 +121,36 @@ public class UserController {
 	@PostMapping(value = "/provider")
 	public ResponseEntity<?> createAuthenticationTokenProvider(@RequestBody JwtRequest authenticationRequest) throws Exception {
 		validador.validate(authenticationRequest);
+		
+		if(authenticationRequest.getUsername().length()<5 || authenticationRequest.getUsername().length()>50) {
+			
+			List<String> errors = new ArrayList<>();
+			String error;
+			error = "El username debe ser como maximo 50 caracteres.";
+			errors.add(error);
+			error = "El username debe ser como minimo 5 caracteres.";
+			errors.add(error);
+				ExceptionResponseCustom exc = new ExceptionResponseCustom(LocalDateTime.now(),String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR),  "El username debe ser como maximo 50 caracteres.", "", "",errors);
+			
+			//ErrorMessage errorMessage = new ErrorMessage(errors);
+			return new ResponseEntity(exc, HttpStatus.BAD_REQUEST);
+			
+		}
+		if(authenticationRequest.getPassword().length()<5 || authenticationRequest.getPassword().length()>20) {
+			
+			List<String> errors = new ArrayList<>();
+			String error;
+			error = "El password debe ser como maximo 20 caracteres.";
+			errors.add(error);
+			error = "El password debe ser como minimo 5 caracteres.";
+			errors.add(error);
+				ExceptionResponseCustom exc = new ExceptionResponseCustom(LocalDateTime.now(),String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR),  "El username debe ser como maximo 20 caracteres.", "", "",errors);
+			
+			//ErrorMessage errorMessage = new ErrorMessage(errors);
+			return new ResponseEntity(exc, HttpStatus.BAD_REQUEST);
+			
+		}
+		
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
 		final UserDetails userDetails = userDetailsService
@@ -144,6 +182,37 @@ public class UserController {
 	public ResponseEntity<?> createAuthenticationTokenClient(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
 		validador.validate(authenticationRequest);
+		
+		if(authenticationRequest.getUsername().length()<5 || authenticationRequest.getUsername().length()>50) {
+			
+			List<String> errors = new ArrayList<>();
+			String error;
+			error = "El username debe ser como maximo 50 caracteres.";
+			errors.add(error);
+			error = "El username debe ser como minimo 5 caracteres.";
+			errors.add(error);
+				ExceptionResponseCustom exc = new ExceptionResponseCustom(LocalDateTime.now(),String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR),  "El username debe ser como maximo 50 caracteres.", "", "",errors);
+			
+			//ErrorMessage errorMessage = new ErrorMessage(errors);
+			return new ResponseEntity(exc, HttpStatus.BAD_REQUEST);
+			
+		}
+		if(authenticationRequest.getPassword().length()<5 || authenticationRequest.getPassword().length()>20) {
+			
+			List<String> errors = new ArrayList<>();
+			String error;
+			error = "El password debe ser como maximo 20 caracteres.";
+			errors.add(error);
+			error = "El password debe ser como minimo 5 caracteres.";
+			errors.add(error);
+				ExceptionResponseCustom exc = new ExceptionResponseCustom(LocalDateTime.now(),String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR),  "El username debe ser como maximo 20 caracteres.", "", "",errors);
+			
+			//ErrorMessage errorMessage = new ErrorMessage(errors);
+			return new ResponseEntity(exc, HttpStatus.BAD_REQUEST);
+			
+		}
+		
+		
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
 		final UserDetails userDetails = userDetailsService
